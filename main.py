@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 import discord, datetime, time
 import os
-#from keep_alive import keep_alive
 import asyncio
 from discord.ext import tasks
 import io
@@ -11,7 +10,7 @@ import custom_commands
 import info
 import usefull_commands
 import moderation
-#import music
+import music
 intents = discord.Intents.default()
 intents.members = True
 
@@ -49,11 +48,10 @@ cogs = [moderation]
 for i in range(len(cogs)):
   cogs[i].setup(client)
 
-""""
+
 cogs = [music]
 
 for i in range(len(cogs)):
   cogs[i].setup(client)
-"""
-#keep_alive()
+
 client.run('ODA4MDE3MTAyMDQwNTk2NDkx.YCAakQ.afCA8itR1d1wpskDA0YWB2GQPDE')

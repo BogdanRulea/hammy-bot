@@ -1,6 +1,6 @@
 import discord
 import discord as d
-import youtube_d1
+import youtube_dl
 from discord.ext import commands
 
 class Music(commands.Cog):

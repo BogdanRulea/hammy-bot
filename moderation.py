@@ -3,22 +3,28 @@ from discord.ext import commands
 import io
 import os
 import discord, datetime, time 
+import asyncio
 import discord as d
+import chat_exporter
 class Moderation(commands.Cog):
   def __init__(self,bot):
     self.bot=bot
 
   @commands.command()
   async def hmyeat(self,ctx, *, number:int=None):
-   if ctx.message.author.guild_permissions.manage_messages :
+   if ctx.message.author.guild_permissions.manage_messages:
     try:
       if number == None:
         await ctx.channel.send("You must input a number.")
       else:
         deleted = await ctx.message.channel.purge(limit = number + 1)
-        await ctx.channel.send(f"Messages purged by {ctx.message.author}: `{len(deleted)-1}`")
-    except:
-      await ctx.channel.send("I can't purge messages here.")
+        channels  = ctx.guild.get_channel(776678190831632414)
+        await channels.send(f"{ctx.author.name} has purged {len(deleted)-1} messages in {ctx.channel.mention}.")
+        delete = await ctx.channel.send(f"Messages purged by {ctx.message.author}: `{len(deleted)-1}`")
+        await asyncio.sleep(1)
+        await ctx.message.channel.purge(limit = 1)
+    except AttributeError:
+      await ctx.channel.send("Purge error.")
    else:
     await ctx.channel.send("You don't have the permissions to use this command.")
 
@@ -49,9 +55,10 @@ class Moderation(commands.Cog):
    mbed.timestamp = datetime.datetime.utcnow()
    mbed.set_footer(text = f"ID: {str(member.id)}/")
    await ctx.send(embed = mbed)
-
+  """
   @commands.command()
   async def catcreate(self,ctx, role : discord.Role, *, name):
+   
    overwrites = {
      ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False, manage_channels=False, manage_permissions = False),
      ctx.guild.me: discord.PermissionOverwrite(read_messages=True),
@@ -60,16 +67,14 @@ class Moderation(commands.Cog):
    category = await ctx.guild.create_category(name = name, overwrites=overwrites)
    mbed = d.Embed(title = "Success", description = f"{category.name} category has been created. ",colour=discord.Colour(0xff9966))
    await ctx.send(embed = mbed)
-  
+  """
   @commands.command()
   async def case_open(self,ctx, judge : discord.Member, *, member : discord.Member):
    if ctx.author.guild_permissions.manage_channels:
     overwrites = {
     ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False, manage_channels= False, manage_permissions = False,create_instant_invite=False, send_messages = False, attach_files = False, embed_links = False, add_reactions=False, mention_everyone = False, use_external_emojis = False, read_message_history= False, manage_webhooks = False, manage_messages = False, send_tts_messages = False),
     
-    
     ctx.guild.me: discord.PermissionOverwrite(read_messages=True, manage_channels= True, manage_permissions = True, send_messages = True, attach_files = True, embed_links = True, add_reactions=True, use_external_emojis = True, read_message_history= True, manage_webhooks = True, manage_messages = True, send_tts_messages = True),
-    
     
     member: discord.PermissionOverwrite(read_messages=True, manage_channels= False, manage_permissions = False,create_instant_invite=False, send_messages = True, attach_files = True, embed_links = True, add_reactions=True, mention_everyone = False, use_external_emojis = True, read_message_history= True, manage_webhooks = False, manage_messages = False, send_tts_messages = True),
    
@@ -93,24 +98,24 @@ class Moderation(commands.Cog):
 
   @commands.command()
   async def case_closed(self,ctx, channel : d.TextChannel):
-   if ctx.author.guild_permissions.manage_messages:
+   if ctx.author.guild_permissions.manage_channels:
     await ctx.message.channel.purge(limit = 1)
     mbed = d.Embed(title = 'Success', description = f'Channel: {channel} has been closed',colour=discord.Colour(0xff9966))
     await ctx.send(embed = mbed)
 
-    filename = f"{channel.name}.txt"
-    with open(filename, "w") as file:
-      async for msg in channel.history(limit=None):
-        file.write(f"{msg.created_at} - {msg.author.display_name}: {msg.clean_content}\n")
-    with open(filename, "rb") as file:
-      await ctx.send(f"**The {channel.name} transcript is: **", file = discord.File(file,f"{filename}"))
+    transcript = await chat_exporter.export(channel)
+    if transcript is None:
+      await ctx.send("This channel has no messages")
+      return
     
+    transcript_file = discord.File(io.BytesIO(transcript.encode()), filename = "transcript-{}.html".format(channel.name))
     await channel.delete()
+    await ctx.send(file=transcript_file)
    else:
     await ctx.send('**You do not have the permissions to delete this channel.**')
 
   @commands.command()
-  async def serverinfo(ctx):
+  async def serverinfo(self,ctx):
    name = str(ctx.guild.name)
    description = str(ctx.guild.description)
    owner = str(ctx.guild.owner)
@@ -124,7 +129,7 @@ class Moderation(commands.Cog):
    mbed = d.Embed(title = name + ' Server Info:', description = 'Description: '+ description, color = 0xff9966)
    mbed.set_thumbnail(url=icon)
    mbed.add_field(name = 'Owner:', value = owner, inline = False)
-   mbed.add_field(name = 'Creation Date:', value = ctx.guild.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S'),inline = False)
+   mbed.add_field(name = 'Creation Date:', value = f"{ctx.guild.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S')}\n({int((time.time()-ctx.guild.created_at.timestamp())//60//60//24)} days ago)",inline = False)
    mbed.add_field(name = 'Server ID:', value = id_guild, inline = True)
    mbed.add_field(name = 'Region:', value = region, inline = True)
    mbed.add_field(name = 'Channels:', value = channels, inline = False)
@@ -132,6 +137,9 @@ class Moderation(commands.Cog):
    mbed.add_field(name = 'Number of members:', value = memberCount, inline = True)
    mbed.add_field(name = "Bots:", value = (','.join(list_of_bots)), inline = False)
    mbed.add_field(name = 'Verification Level:', value = str(ctx.guild.verification_level), inline = True)
+   mbed.set_author(name = str(ctx.author.name),url=ctx.author.avatar_url)
+   mbed.timestamp=datetime.datetime.utcnow()
+
    await ctx.send(embed = mbed)
 
 
