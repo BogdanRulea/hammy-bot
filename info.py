@@ -25,5 +25,10 @@ class Info(commands.Cog):
     mbed.set_thumbnail(url = str(self.bot.user.avatar_url))
     await ctx.channel.send(embed = mbed)
   
+  @commands.command()
+  async def music(self, ctx):
+    mbed = d.Embed(title = "(Beta)Music commands:", description = "**?join** - add the bot in the voice channel\n**?leave** - kick the bot from the voice channel\n**?play + {song name}** - play a song if there is no queue otherwise it will add the song to the song queue\n**?queue** - shows the songs queue\n**?skip** - skip the current song\n**?pause** - pause the player\n**?resume** - start the player again\n**?volume + {float number}(0-100 range)** - change the volume of the player\n**?remove + {index}** - remove the song from the queue with the specified index\n**?stop** - stop the player\n**?loop** - enable/disable the loop for the current song",color = 0xff9966)
+    mbed.set_thumbnail(url = str(ctx.guild.icon_url))
+    await ctx.send(embed = mbed)
 def setup(client):
   client.add_cog(Info(client))

@@ -23,6 +23,13 @@ async def on_ready():
   await client.change_presence(status = discord.Status.idle, activity = activity)
   print('Hammy logged in as {0.user}'.format(client))
 
+@client.event
+async def on_member_join(member):
+  channel=client.get_channel(778291814444040212)
+  joined_member = int((time.time() - member.created_at.timestamp())//60//60//24)
+  await channel.send(f"> **{member.name} account** has been created **{joined_member}** days ago.")
+  
+
 cogs = [custom_commands]
 
 for i in range(len(cogs)):

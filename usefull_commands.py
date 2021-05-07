@@ -37,7 +37,7 @@ class Useful_Commands(commands.Cog):
    else:
     await ctx.channel.send(f"> **{len(role.members)} members have {role} role:**\n> **TOO MANY NAMES TO SHOW**")
   
-  @commands.command()
+  @commands.command(aliases = ["wwyd", "say"])
   async def announce(self,ctx):
    if ctx.author.guild_permissions.manage_messages:
 

@@ -55,6 +55,7 @@ class Games(commands.Cog):
     mbed.add_field(name = "User", value = str(ctx.author.mention),inline = True)
     mbed.add_field(name = "Your number: ", value = str(random.choice(range(1,6))), inline = True)
     await ctx.send(embed = mbed)
+  
 
 def setup(client):
- client.add_cog(Games(client))
+  client.add_cog(Games(client))
