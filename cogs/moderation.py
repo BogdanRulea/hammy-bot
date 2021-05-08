@@ -68,7 +68,7 @@ class Moderation(commands.Cog):
    mbed = d.Embed(title = "Success", description = f"{category.name} category has been created. ",colour=discord.Colour(0xff9966))
    await ctx.send(embed = mbed)
   """
-  @commands.command(name = "case_open", description = "create a channel for member's case")
+  @commands.command(name = "case_open", description = "create a channel for member's case", hidden = True)
   async def case_open(self,ctx, judge : discord.Member, *, member : discord.Member):
    if ctx.author.guild_permissions.manage_channels:
     overwrites = {
@@ -87,7 +87,7 @@ class Moderation(commands.Cog):
    else:
     await ctx.send("**You don't have the permissions to use this command**")
 
-  @commands.command(name = "witness", aliases = ["add","toggle"], description = "add/kick witnesses from interrogation channels")
+  @commands.command(name = "witness", aliases = ["add","toggle"], description = "add/kick witnesses from interrogation channels", hidden = True)
   async def witness(self,ctx, member : discord.Member):
    if ctx.author.guild_permissions.manage_permissions:
     perms = ctx.channel.overwrites_for(member)
@@ -96,7 +96,7 @@ class Moderation(commands.Cog):
    else:
     await ctx.send("**You don't have the permissions to use this command.**")
 
-  @commands.command(name = "case_closed", description = "delete the specified channel and send the transcript in the channel where the command was appealed")
+  @commands.command(name = "case_closed", description = "delete the specified channel and send the transcript in the channel where the command was appealed", hidden = True)
   async def case_closed(self,ctx, channel : d.TextChannel):
    if ctx.author.guild_permissions.manage_channels:
     await ctx.message.channel.purge(limit = 1)

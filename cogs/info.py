@@ -14,34 +14,35 @@ class Info(commands.Cog):
     await ctx.channel.send(embed = mbed)
   
   @commands.command(name = 'help', aliases = ["h",'commands'], description = "Hammy bot commands")
-  async def help(self,ctx,cog = '1'):
-    help_mbed=d.Embed(title = "Help command!(beta)", color = 0xff9966)
+  async def help(self,ctx):
+    
     cogs = [c for c in self.bot.cogs.keys()]
     cogs.remove('Levels')
-    total_pages = len(cogs)
-    cog = int(cog)
-    if cog > total_pages or cog<1:
-      await ctx.send(f"Invalid page number: {cog}. Please pick from {total_pages} pages. You can you use the default **help** command that will show the first page.")
-    
+    embeds = []
+
     for cog in cogs:
       commandList= ""
       for command in self.bot.get_cog(cog).walk_commands():
-        commandList += f"**{command.name}** - *{command.description}*\n"
-      commandList+='\n'
+        if command.hidden:
+          continue
+        commandList += f"``{command.name}`` - *{command.description}*\n"
+        if len(command.aliases) > 0:
+          commandList+="**Aliases: **" + ", ".join(command.aliases) + "\n"
+        commandList+=f'**Format:** ``?{command.name} {command.help}``\n\n'
+
+      help_mbed=d.Embed(title = "Help command!(beta)", color = 0xff9966)
       help_mbed.add_field(name=cog, value=commandList, inline = False)
-    
-    await ctx.send(embed = help_mbed)
+      embeds.append(help_mbed)
 
-
-
-    """
-    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx)
+    paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx,auto_footer = True, remove_reactions= False)
     paginator.add_reaction('⏮️', "first")
     paginator.add_reaction('⏪', "back")
     paginator.add_reaction('🔐', "lock")
     paginator.add_reaction('⏩', "next")
     paginator.add_reaction('⏭️', "last")
-    """
+
+    await paginator.run(embeds)
+
 
   
 def setup(client):

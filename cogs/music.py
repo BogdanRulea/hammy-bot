@@ -36,12 +36,20 @@ class Music(commands.Cog):
     if not player:
       player = self.music.create_player(ctx, ffmpeg_error_betterfix = True)
     if not ctx.voice_client.is_playing():
+      await ctx.send("Searching...")
       await player.queue(url, search = True)
       song = await player.play()
-      await ctx.send(f"Playing {song.name}.")
+      mbed = d.Embed(title = f"Playing {song.name}",color = 0xff9966)
+      mbed.set_thumbnail(url = song.thumbnail)
+      mbed.add_field(name = "Duration:", value = f"{song.duration//60} minutes", inline = True)
+      await ctx.send(embed = mbed)
+      await ctx.send(song.url)
     else:
       song = await player.queue(url, search = True)
-      await ctx.send(f"Queued {song.name}.")
+      mbed = d.Embed(title = f"Queued {song.name}.", color = 0xff9966)
+      mbed = d.Embed(title = "Queue index:", value = len(player.current_queue())-1,inline = False)
+      mbed.set_thumbnail(url = song.thumbnail)
+      await ctx.send(embed = mbed)
   
   @commands.command(name = "pause", aliases = ["p"], description = "pause the current song")
   async def pause(self, ctx):
@@ -74,7 +82,7 @@ class Music(commands.Cog):
   async def queue(self, ctx):
     player = self.music.get_player(guild_id=ctx.guild.id)
     number = 0
-    mbed = d.Embed (title = "Song queue:", description = f"\n- ".join([song.name for song in player.current_queue()]),color = 0xff9966)
+    mbed = d.Embed (title = "Song queue:", description = f"\n".join([str(player.current_queue().index(song)) + ". " + song.name for song in player.current_queue()]),color = 0xff9966)
     mbed.set_thumbnail(url = ctx.guild.icon_url)
     await ctx.send(embed = mbed)
 
@@ -85,13 +93,13 @@ class Music(commands.Cog):
     await ctx.send(f"Skipped {data[0].name}")
 
   @commands.command(name= "volume",aliases = ["v"], description = "changes the player volume")
-  async def volume(self,ctx, number : float):
+  async def volume(self,ctx, number):
     try:
       player = self.music.get_player(guild_id = ctx.guild.id)
       song, volume = await player.change_volume(float(number)/100)
-      await ctx.send(f"Changed colume for {song.name} to {volume*100}%")
+      await ctx.send(f"Changed volume for {song.name} to {volume*100}%")
     except AttributeError:
-      await ctx.send("You have to type a valid float number between 0 and 1.")
+      await ctx.send("You have to type a valid number.")
 
   @commands.command(name = "remove", description = "remove a song from the queue(index required)")
   async def remove(self, ctx, index :int):
