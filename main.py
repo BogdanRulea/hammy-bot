@@ -5,16 +5,10 @@ import os
 import asyncio
 from discord.ext import tasks
 import io
-import games
-import custom_commands
-import info
-import usefull_commands
-import moderation
-import music
 intents = discord.Intents.default()
 intents.members = True
 
-client = commands.Bot(command_prefix='?', intents = intents)
+client = commands.Bot(command_prefix='?', intents = intents, help_command = None)
 
 
 @client.event
@@ -27,38 +21,14 @@ async def on_ready():
 async def on_member_join(member):
   channel=client.get_channel(778291814444040212)
   joined_member = int((time.time() - member.created_at.timestamp())//60//60//24)
-  await channel.send(f"> **{member.name} account** has been created **{joined_member}** days ago.")
-  
+  await channel.send(f"> **{member.name} account** has been created **{joined_member}** days ago.\n**Reminder: For new members, make sure you assign them either the Pirate or Wizard Soapie role(s)!**")
 
-cogs = [custom_commands]
-
-for i in range(len(cogs)):
-  cogs[i].setup(client)
-
-cogs = [games]
-
-for i in range(len(cogs)):
-  cogs[i].setup(client)
-
-cogs = [info]
-
-for i in range(len(cogs)):
-  cogs[i].setup(client)
-
-cogs = [usefull_commands]
-
-for i in range(len(cogs)):
-  cogs[i].setup(client)
-
-cogs = [moderation]
-
-for i in range(len(cogs)):
-  cogs[i].setup(client)
-
-
-cogs = [music]
-
-for i in range(len(cogs)):
-  cogs[i].setup(client)
+client.load_extension('cogs.custom_commands')
+client.load_extension('cogs.games')
+client.load_extension('cogs.info')
+client.load_extension('cogs.leveling')
+client.load_extension('cogs.music')
+client.load_extension('cogs.moderation')
+client.load_extension('cogs.usefull_commands')
 
 client.run('ODA4MDE3MTAyMDQwNTk2NDkx.YCAakQ.afCA8itR1d1wpskDA0YWB2GQPDE')
