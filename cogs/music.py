@@ -15,6 +15,7 @@ class Music(commands.Cog):
     channel = ctx.author.voice.channel
     voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
     if not voice:
+     await ctx.send(f"I joined in {channel.mention}")
      await channel.connect()
     else:
       await ctx.send(f"{self.bot.user} is already connected to a voice channel.")
@@ -23,7 +24,6 @@ class Music(commands.Cog):
   async def leave(self, ctx):
     if ctx.voice_client:
      await ctx.voice_client.disconnect()
-    
     else:
       await ctx.send(f"{self.bot.user} is not in any voice channel.")
   
@@ -31,6 +31,7 @@ class Music(commands.Cog):
   async def play(self,ctx,*, url):
     voice = discord.utils.get(self.bot.voice_clients, guild = ctx.guild)
     if not voice:
+      await ctx.send(f"I joined in {ctx.author.voice.channel.mention}")
       await ctx.author.voice.channel.connect()
     player = self.music.get_player(guild=ctx.guild.id)
     if not player:
@@ -45,9 +46,10 @@ class Music(commands.Cog):
       await ctx.send(embed = mbed)
       await ctx.send(song.url)
     else:
+      await ctx.send("Searching...")
       song = await player.queue(url, search = True)
       mbed = d.Embed(title = f"Queued {song.name}.", color = 0xff9966)
-      mbed = d.Embed(title = "Queue index:", value = len(player.current_queue())-1,inline = False)
+      mbed.add_field(name = "Queue index:", value = str(len(player.current_queue())-1),inline = False)
       mbed.set_thumbnail(url = song.thumbnail)
       await ctx.send(embed = mbed)
   

@@ -211,21 +211,7 @@ class Useful_Commands(commands.Cog):
    else:
     await ctx.send("You do not have the permissions to use this command.")
   """
-  start_time=time.time()
-  @commands.command(name = "uptime", description = "shows bot's uptime")
-  async def uptime(self, ctx):
-    current_time = time.time()
-    difference = int(round(current_time - self.start_time))
-    text = str(datetime.timedelta(seconds=difference))
-    embed = discord.Embed(colour=0xc8dc6c)
-    embed.set_thumbnail(url = str(self.bot.user.avatar_url))
-    embed.add_field(name="Uptime", value=text)
-    embed.set_footer(text=f"{self.bot.user.name}")
-    try:
-      await ctx.send(embed=embed)
-    except discord.HTTPException:
-      await ctx.send("Current uptime: " + text) 
-
+  
 
 def setup(client):
   client.add_cog(Useful_Commands(client))
