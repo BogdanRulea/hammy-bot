@@ -5,6 +5,7 @@ import discord, time, datetime
 from discord.ext import commands
 import platform
 import DiscordUtils
+import json
 class Info(commands.Cog):
   def __init__(self,bot):
     self.bot = bot
@@ -44,22 +45,33 @@ class Info(commands.Cog):
           continue
         commandList += f"``{command.name}`` - *{command.description}*\n"
         if len(command.aliases) > 0:
-          commandList+="**Aliases: **" + ", ".join(command.aliases) + "\n"
-        commandList+=f'**Format:** ``?{command.name}``\n\n'
+          commandList+="**Aliases: **" + ", ".join(command.aliases) + "\n\n"
 
       help_mbed=d.Embed(title = "Help command!(beta)", color = 0xff9966)
+      #help_mbed.add_field(name = "Commands prefix:", value = )
       help_mbed.add_field(name=cog, value=commandList, inline = False)
       embeds.append(help_mbed)
 
     paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx,auto_footer = True, remove_reactions= True, timeout = 60)
-    paginator.add_reaction('⏮️', "first")
-    paginator.add_reaction('⏪', "back")
-    paginator.add_reaction('🔐', "lock")
-    paginator.add_reaction('⏩', "next")
-    paginator.add_reaction('⏭️', "last")
+    paginator.add_reaction('↩️', "first")
+    paginator.add_reaction('⬅️', "back")
+    paginator.add_reaction('🛑', "lock")
+    paginator.add_reaction('➡️', "next")
+    paginator.add_reaction('↪️', "last")
 
     await paginator.run(embeds)
 
+  @commands.command(description = "change the bot prefix(admin+ only)")
+  @commands.has_permissions(administrator = True)
+  async def prefix(self,ctx, prefix = "?"):
+    with open("prefixes.json", "r") as f:
+      prefixes = json.load(f)
+    
+    prefixes[str(ctx.guild.id)] = prefix
+
+    with open("prefixes.json", "w") as f:
+      json.dump(prefixes, f, indent = 4)
+    await ctx.send("My prefix has been changed to {}".format(prefix)) 
 
   
 def setup(client):

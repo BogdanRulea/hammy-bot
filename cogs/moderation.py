@@ -28,7 +28,7 @@ class Moderation(commands.Cog):
    else:
     await ctx.channel.send("You don't have the permissions to use this command.")
 
-  @commands.command(name= "userinfo", description = "shows user's info")
+  @commands.command(name= "userinfo",aliases = ["profile"] ,description = "shows user's info")
   async def userinfo(self,ctx, member : discord.Member = None):
    if member == None:
     member = ctx.author

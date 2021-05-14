@@ -6,6 +6,7 @@ import os
 import random
 import discord as d
 from discord.ext import commands
+import DiscordUtils
 
 class Useful_Commands(commands.Cog):
   def __init__(self,bot):
@@ -28,14 +29,28 @@ class Useful_Commands(commands.Cog):
   async def inrole(self, ctx, role : discord.Role):
    rol = ctx.guild.get_role(role.id)
    memberlist = [] 
-   if len(rol.members) <= 50:
-    for r in rol.members:
-      memberlist.append(f"{r.display_name}#{r.discriminator}")
+   embeds = []
+   for r in rol.members:
+    memberlist.append(f"{r.display_name}#{r.discriminator}")
+    if len(memberlist)%20==0:
+      mbed = d.Embed(title = f"**{len(role.members)} members have {role} role:**",description = "\n".join(memberlist),colour=discord.Colour(0xff9966))
+      mbed.set_thumbnail(url=str(ctx.guild.icon_url))
+      embeds.append(mbed)
+      memberlist = []
+    
+   if len(memberlist)>0:
     mbed = d.Embed(title = f"**{len(role.members)} members have {role} role:**",description = "\n".join(memberlist),colour=discord.Colour(0xff9966))
     mbed.set_thumbnail(url=str(ctx.guild.icon_url))
-    await ctx.channel.send(embed = mbed)
-   else:
-    await ctx.channel.send(f"> **{len(role.members)} members have {role} role:**\n> **TOO MANY NAMES TO SHOW**")
+    embeds.append(mbed)
+
+   paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx,auto_footer = True, remove_reactions= True, timeout = 60)
+   paginator.add_reaction('↩️', "first")
+   paginator.add_reaction('⬅️', "back")
+   paginator.add_reaction('🛑', "lock")
+   paginator.add_reaction('➡️', "next")
+   paginator.add_reaction('↪️', "last")
+
+   await paginator.run(embeds)
   
   @commands.command(name = "announce",aliases = ["wwyd", "say"], description = "send the announcement/question to the given channel (Command for staff members only)")
   async def announce(self,ctx):
@@ -180,6 +195,15 @@ class Useful_Commands(commands.Cog):
      
    else:
     ctx.send("**You don't have the permissions to use this command.**")
+
+  
+  @commands.command(aliases = ["av"], description = "display member avatar")
+  async def avatar(self,ctx, member : discord.Member = None):
+    if member == None:
+      member = ctx.author
+    embed = d.Embed(title = f"{member.name}\'s avatar")
+    embed.set_image(url = member.avatar_url)
+    await ctx.send(embed = embed)
 
   """
   @commands.command(pass_context = True)

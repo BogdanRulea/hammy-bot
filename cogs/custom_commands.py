@@ -49,15 +49,7 @@ class Custom_Commands(commands.Cog):
   async def punch(self,ctx, member: discord.Member):
     await ctx.send( ctx.author.mention + " You've just punched " + member.mention + ", K.O.!" + '\n https://media.giphy.com/media/dDR1TIXAWcVoNaYcbj/giphy.gif')
 
-  def get_quote(self):
-    response = requests.get("https://zenquotes.io/api/random")
-    json_data = json.loads(response.text)
-    quote = '> ' + json_data[0]["q"] + "-" + '||' + json_data[0]["a"] + '||'
-    return (quote)
-
-  @commands.command(name = "inspire", description = "motivational quote")
-  async def inspire(self,ctx):
-    await ctx.send(self.get_quote())
+  
 
   
   @commands.command(name = "slap",description = "slap someone you mention")
@@ -108,5 +100,6 @@ class Custom_Commands(commands.Cog):
       await channel.send(embed = mbed)
     else: 
       await ctx.send("You do not have the permissions to use this command")
+
 def setup(client):
  client.add_cog(Custom_Commands(client))
