@@ -60,7 +60,7 @@ class Info(commands.Cog):
     paginator.add_reaction('↪️', "last")
 
     await paginator.run(embeds)
-
+  """
   @commands.command(description = "change the bot prefix(admin+ only)")
   @commands.has_permissions(administrator = True)
   async def prefix(self,ctx, prefix = "?"):
@@ -72,7 +72,7 @@ class Info(commands.Cog):
     with open("prefixes.json", "w") as f:
       json.dump(prefixes, f, indent = 4)
     await ctx.send("My prefix has been changed to {}".format(prefix)) 
-
+"""
   
 def setup(client):
   client.add_cog(Info(client))

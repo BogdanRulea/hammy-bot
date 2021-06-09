@@ -116,9 +116,137 @@ class Useful_Commands(commands.Cog):
 
         mess = await self.bot.wait_for("message", check = check)
 
-        await channel.send(f"**Announcement:**\n{mess.content}\nAnnouncement by {ctx.author.name}.")
+        await ctx.channel.send("**Do you want to ping ``@here``? (yes or no)**")
+
+        ans = await self.bot.wait_for("message", check = check)
+
+        if ans.content.lower()=="yes":
+          here = "@here"
+        else:
+          here = ""
+
+        await channel.send(f"**Announcement:**\n{mess.content}\nAnnouncement by {ctx.author.name}. {here}")
         mbed = d.Embed(title = "Success", description = f"The announcement was successfully posted in {channel.mention}.",colour=discord.Colour(0xff9966))
         mbed.set_thumbnail(url = str(ctx.guild.icon_url))
+        await ctx.send(embed = mbed)
+      except IndexError:
+        await ctx.send("**> This is not a valid channel**")
+    else:
+     await ctx.channel.send("**Choice unavailable please try again.**")
+
+    
+   else:
+    await ctx.channel.send("**You don't have the permissions to post a wwyd.**")
+
+  @commands.command(name = "sannounce",aliases = ["swwyd", "ssay"], description = "send the announcement/question to the given channel after a given amount of time (Command for staff members only)")
+  async def sannounce(self,ctx):
+   if ctx.author.guild_permissions.manage_messages:
+    def check(msg):
+      return msg.author == ctx.author and msg.channel == ctx.channel
+    
+    await ctx.send("When do you wanna send this announcement? - The time should have this format = (time)s/m/h/d | Example: 5m -")
+
+    T = await self.bot.wait_for("message", check = check)
+
+    time = T.content
+
+    seconds = 0
+
+    if time.lower().endswith("d"):
+     seconds += int(time[:-1]) * 60 * 60 * 24
+     counter = f"{seconds // 60 // 60 // 24} days"
+    if time.lower().endswith("h"):
+     seconds += int(time[:-1]) * 60 * 60
+     counter = f"{seconds // 60 // 60} hours"
+    elif time.lower().endswith("m"):
+     seconds += int(time[:-1]) * 60
+     counter = f"{seconds // 60} minutes"
+    elif time.lower().endswith("s"):
+     seconds += int(time[:-1])
+     counter = f"{seconds} seconds"
+    elif seconds > 7776000:
+     ctx.send("You can't set the timer for more than 90 days.")
+     return
+    else:
+      ctx.send("Time invalid please try again!")
+      return
+
+    DM = await ctx.message.author.create_dm()
+    await ctx.channel.send("**Do you want to use this command for wwyd purpose or any other announcement?(type one of this answers wwyd/others)**")
+
+    purpose = await self.bot.wait_for("message", check = check)
+
+    """
+    WWYD CHOICE
+    """
+    if purpose.content.lower() == "wwyd":
+      await ctx.channel.send("**Now type the channel where you want to post the question.**")
+      try:
+       cnel = await self.bot.wait_for("message", check = check)
+
+       channel_id = cnel.channel_mentions[0].id
+
+       channel = self.bot.get_channel(channel_id)
+       await ctx.send("**Is this a select an answer question or a type your own question? Type one of the following**: **SELECT/TYPE**")
+
+       CHOICE = await self.bot.wait_for('message', check=check)
+
+       if CHOICE.content.lower()=="type":
+          await ctx.channel.send("**Now type the wwyd question.(Don't forget to add '?')**\n **No bold needed!!!**")
+       
+          mess = await self.bot.wait_for("message", check=check)
+          await ctx.send(f"**Ok, I will post this announcement in {channel.mention} in {counter}.**")
+          await asyncio.sleep(seconds)
+          await channel.send(f"**Question: {mess.content}**\nThis is an open ended question. Answer in as many or as little words as you like. If you like someone's answer, be sure to <:star:821851035928231966> it!\nPost by {ctx.author.name}")
+          mbed = d.Embed(title = "Success", description = f"The announcement was successfully posted in {channel.mention}.", color = 0xff9966)
+          mbed.set_thumbnail(url = str(ctx.guild.icon_url))
+          await DM.send(embed = mbed)
+          await ctx.send(embed = mbed)
+       elif CHOICE.content.lower()=="select":
+         await ctx.channel.send("**Now type the wwyd question.(Don't forget to add '?')**\n **No bold needed!!!**")
+       
+         mess = await self.bot.wait_for("message", check=check)
+         await ctx.send(f"Ok, I will post this announcement in {channel.mention} in {counter}.")
+         await asyncio.sleep(seconds)
+         await channel.send(f"**Question: {mess.content}**\nPick one of the options and explain why’d you choose it over the other(s). If you like someone’s answer, be sure to <:star:821851035928231966> it!\nPost by {ctx.author.name}")
+         mbed = d.Embed(title = "Success", description = f"The announcement was successfully posted in {channel.mention}.",colour=discord.Colour(0xff9966))
+         mbed.set_thumbnail(url = str(ctx.guild.icon_url))
+         await DM.send(embed = mbed)
+         await ctx.send(embed = mbed)
+       else:
+         await ctx.send("**Choice unavailable, please try again!**")
+      except IndexError:
+        await ctx.send("**> This is not a valid channel**")
+
+      """
+       others choice
+       """  
+    elif purpose.content.lower() == "others":
+      await ctx.channel.send("**Now type the channel where you want to post the question.**")
+      try:
+        cnel = await self.bot.wait_for("message", check = check)
+
+        channel_id = cnel.channel_mentions[0].id
+
+        channel = self.bot.get_channel(channel_id)
+        await ctx.channel.send("**Now type the announcement.**")
+        mess = await self.bot.wait_for("message", check = check)
+
+        await ctx.channel.send("**Do you want to ping ``@here``? (yes or no)**")
+
+        ans = await self.bot.wait_for("message", check = check)
+
+        if ans.content.lower()=="yes":
+          here = "@here"
+        else:
+          here = ""
+
+        await ctx.send(f"**Ok, I will post this announcement in {channel.mention} in {counter}.**")
+        await asyncio.sleep(seconds)
+        await channel.send(f"**Announcement:**\n{mess.content}\nAnnouncement by {ctx.author.name}. {here}")
+        mbed = d.Embed(title = "Success", description = f"The announcement was successfully posted in {channel.mention}.",colour=discord.Colour(0xff9966))
+        mbed.set_thumbnail(url = str(ctx.guild.icon_url))
+        await DM.send(embed = mbed)
         await ctx.send(embed = mbed)
       except IndexError:
         await ctx.send("**> This is not a valid channel**")

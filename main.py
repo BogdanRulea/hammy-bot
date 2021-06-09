@@ -4,22 +4,36 @@ import discord, datetime, time
 import os
 import asyncio
 from discord.ext import tasks
-import json
+#import json
 import io
+import pymongo
+from pymongo import MongoClient
+
+
+
 
 intents = discord.Intents.default()
 intents.members = True
 
 DEFAULTPREFIX = "?"
+"""
+cluster = MongoClient['/hammybotdb:9aB0XQ0jbP8qp9sU%40%cluster0.g8mdi.mongodb.net/test']
+
+DB = "BotData"
+
+db = cluster[DB]
+
+collection = db[DB]
 
 def get_prefix(client, message):
-  with open("prefixes.json", "r") as f:
-    data = json.load(f)
-  
+  data = 
+
+  if message.guild.id in data:
+    return commands.when_mentioned_or(data[str(message.guild.id)])(client,message)
   if not str(message.guild.id) in data:
     return commands.when_mentioned_or("?")(client,message)
-  return commands.when_mentioned_or(data[str(message.guild.id)])(client,message)
   
+"""  
 client = commands.Bot(command_prefix=DEFAULTPREFIX, intents = intents, help_command = None, owner_id = 241529498221281280)
 
 @client.event
@@ -33,19 +47,20 @@ async def on_ready():
 async def on_message(message):
   if f"<@!{client.user.id}>" in message.content:
     
-    with open("prefixes.json", "r") as f:
-      data = json.load(f)
-      
-    if str(message.guild.id) in data:
-      prefix = data[str(message.guild.id)]
+   
+
+    if message.guild.id in data["Server_id"]:
+      #my_prefix = data["Prefix"]
     else:
-      prefix = "?"
+      mydic = {"Server_id" : str(message.guild.id), "Prefix" : DEFAULTPREFIX}
+      my_prefix = DEFAULTPREFIX
+      #collection.insert_one(mydic)
 
-    await message.channel.send(f"My prefix is {prefix}. If you want to change the prefix use ``{prefix}prefix (prefix)``")
+    await message.channel.send(my_prefix)
 
-  
   await client.process_commands(message)
 """
+
 @client.event
 async def on_member_join(member):
   
