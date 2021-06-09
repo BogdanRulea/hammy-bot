@@ -10,10 +10,6 @@ class Music(commands.Cog):
 
   music = DiscordUtils.Music()
 
-  def voice_state():
-    voice = discord.utils.get(self.bot.voice_clients, guild = ctx.guild)
-    return voice
-
   @commands.command(name= "join",description = "add the bot in the voice channel",alias = "start")
   async def join(self,ctx):
     channel = ctx.author.voice.channel
@@ -44,15 +40,16 @@ class Music(commands.Cog):
       await ctx.send("Searching...")
       await player.queue(url, search = True)
       song = await player.play()
-      mbed = d.Embed(title = f"Playing {song.name}",color = 0xff9966)
+      mbed = d.Embed(title = f"Playing {song.name} - {song.duration//60} min",color = 0xff9966)
       mbed.set_thumbnail(url = song.thumbnail)
-      mbed.add_field(name = "Duration:", value = f"{song.duration//60} minutes", inline = True)
+      mbed.add_field(name = "Duration:", value = f"{song.duration//60} min", inline = True)
       await ctx.send(embed = mbed)
       await ctx.send(song.url)
     else:
       await ctx.send("Searching...")
       song = await player.queue(url, search = True)
-      mbed = d.Embed(title = f"Queued {song.name}.", color = 0xff9966)
+      mbed = d.Embed(title = f"Queued {song.name}", color = 0xff9966)
+      mbed.add_field(name = "Duration:", value = f"{song.duration//60} min", inline = False)
       mbed.add_field(name = "Queue index:", value = str(len(player.current_queue())-1),inline = False)
       mbed.set_thumbnail(url = song.thumbnail)
       await ctx.send(embed = mbed)
@@ -101,7 +98,7 @@ class Music(commands.Cog):
      try:
       player = self.music.get_player(guild_id=ctx.guild.id)
       number = 0
-      mbed = d.Embed (title = "Song queue:", description = f"\n".join([str(player.current_queue().index(song)) + ". " + song.name for song in player.current_queue()]),color = 0xff9966)
+      mbed = d.Embed (title = "Song queue:", description = f"\n".join([str(player.current_queue().index(song)) + ". " + song.name + " - " + str(song.duration//60) + " min" for song in player.current_queue() ]),color = 0xff9966)
       mbed.set_thumbnail(url = ctx.guild.icon_url)
       await ctx.send(embed = mbed)
      except AttributeError:

@@ -18,10 +18,6 @@ class Custom_Commands(commands.Cog):
     await ctx.channel.send(
         ctx.author.mention + " gave you a hug " + member.mention + "\nhttps://media.giphy.com/media/EvYHHSntaIl5m/giphy.gif")
 
-  @commands.command(name = "auctions",description = "ping someone you mention to check auctions")
-  async def auctions(self,ctx, member: discord.Member):
-    await ctx.send( member.mention + " check auctions lazy ass!" + "\nhttps://media.giphy.com/media/nc65jJ18MwDREGx5QI/giphy.gif")
-  
   @commands.command(name = "drink",description = "trigger I will drink to that message")
   async def drink(self,ctx):
     await ctx.send('I will drink to that!' + '\nhttps://media.giphy.com/media/g9582DNuQppxC/giphy.gif')
@@ -43,14 +39,6 @@ class Custom_Commands(commands.Cog):
   @commands.command(name = "spy",description = "creepy hamster that watches you")
   async def spy(self,ctx):
     await ctx.send( f"I am watching you " + '\n https://media.giphy.com/media/pm4VOSkAgkj3q/giphy.gif')
-
-
-  @commands.command(name = "punch", description = "punch someone you mention")
-  async def punch(self,ctx, member: discord.Member):
-    await ctx.send( ctx.author.mention + " You've just punched " + member.mention + ", K.O.!" + '\n https://media.giphy.com/media/dDR1TIXAWcVoNaYcbj/giphy.gif')
-
-  
-
   
   @commands.command(name = "slap",description = "slap someone you mention")
   async def slap(self,ctx, member: discord.Member):
@@ -100,6 +88,43 @@ class Custom_Commands(commands.Cog):
       await channel.send(embed = mbed)
     else: 
       await ctx.send("You do not have the permissions to use this command")
+
+  @commands.command(description = "This command shows you the pp size")
+  async def pp(self, ctx, member : discord.Member = None):
+    if member == None:
+      member = ctx.author
+    mbed = d.Embed(title = f"{member.name}'s pp size:", description = "8"+ f"".join('=' for i in range(random.randrange(0,10))) + "D",color = 0xff9966)
+    await ctx.send(embed = mbed)
+  
+  @commands.command(description = "This command shows you the nerd level")
+  async def nerd(self,ctx, member : discord.Member = None):
+    if member == None:
+      member = ctx.author
+    
+    mbed = d.Embed(title = f"{member.name}'s nerd level:", description = f"You are {random.randrange(0,100)}/100 nerd.", color = 0xff9966)
+    await ctx.send(embed = mbed)
+  
+  @commands.command(description = "This command shows you the simp rate")
+  async def simp(self,ctx, member : discord.Member = None):
+    if member == None:
+      member = ctx.author
+    
+    mbed = d.Embed(title = f"{member.name}'s simp rate:", description = f"You are {random.randrange(0,100)}/100 simp.", color = 0xff9966)
+    await ctx.send(embed = mbed)
+  
+  @commands.command(description = "This command shows you the alchy level")
+  async def alchy(self,ctx, member : discord.Member = None):
+    if member == None:
+      member = ctx.author
+    mbed = d.Embed(title = f"{member.name}'s alchy level:", description = f"You are {random.randrange(0,100)}/100 alchy.", color = 0xff9966)
+    await ctx.send(embed = mbed)
+  
+  @commands.command(description = "This command shows you the waifu level")
+  async def waifu(self,ctx, member : discord.Member = None):
+    if member == None:
+      member = ctx.author
+    mbed = d.Embed(title = f"{member.name}'s waifu level:", description = f"You are {random.randrange(0,100)}/100 waifu. <:pepeblush:814708544921927690>", color = 0xff9966)
+    await ctx.send(embed = mbed)
 
 def setup(client):
  client.add_cog(Custom_Commands(client))
