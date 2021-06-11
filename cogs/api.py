@@ -2,11 +2,11 @@ import discord
 from discord.ext import commands
 import json
 import requests
-from aiohttp import ClientSession
+import aiohttp 
 
 
 
-class API_commands(commands.Cog):
+class API_Commands(commands.Cog):
     def __init__(self, bot):
         self.bot=bot
     
@@ -23,11 +23,18 @@ class API_commands(commands.Cog):
     @commands.command(name = "dadjoke", aliases = ["dj", "dadjokes"], description = "tell you a dad joke")
     async def dadjoke(self,ctx):
         url = "https://dad-jokes.p.rapidapi.com/random/joke"
-        headers ={'x-rapidapi-key': "50a4f38679msh704c82e1d14329fp1e023ajsnaf7583db258b", 'x-rapidapi-host': "dad-jokes.p.rapidapi.com"}
+        headers ={'x-rapidapi-host': "dad-jokes.p.rapidapi.com",'x-rapidapi-key': "50a4f38679msh704c82e1d14329fp1e023ajsnaf7583db258b"}
+
+        async with aiohttp.request('GET',url, headers= headers) as result:
+            jokes = await result.json()
+            await ctx.send(f"**{jokes['body'][0]['setup']}**\n\n**||{jokes['body'][0]['punchline']}||**")
+
+        """
         async with ClientSession() as session:
             async with session.get(url, headers = headers) as response:
                 r = await response.json()
-                await ctx.send(f"**{r['setup']}**\n\n||{r['punchline']}||")
-
+                print(r)
+                #await ctx.send(f"**{r['setup'][0]}**\n\n||{r['punchline'][0]}||")
+        """
 def setup(client):
-    client.add_cog(API_commands(client))
+    client.add_cog(API_Commands(client))

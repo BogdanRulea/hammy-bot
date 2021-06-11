@@ -6,6 +6,7 @@ import discord, datetime, time
 import asyncio
 import discord as d
 import chat_exporter
+from discord.ext.commands.cog import Cog
 class Moderation(commands.Cog):
   def __init__(self,bot):
     self.bot=bot
@@ -141,6 +142,44 @@ class Moderation(commands.Cog):
    mbed.timestamp=datetime.datetime.utcnow()
 
    await ctx.send(embed = mbed)
+   
+  """
+  @commands.command(name ="afk", description = "This command make you AFK")
+  async def afk(self,ctx,time ,*,reason = "No reason given"):
+    current_nickname = ctx.author.nick
+    
+    seconds = 0
+
+    if time.lower().endswith("d"):
+     seconds += int(time[:-1]) * 60 * 60 * 24
+     counter = f"{seconds // 60 // 60 // 24} days"
+    if time.lower().endswith("h"):
+     seconds += int(time[:-1]) * 60 * 60
+     counter = f"{seconds // 60 // 60} hours"
+    elif time.lower().endswith("m"):
+     seconds += int(time[:-1]) * 60
+     counter = f"{seconds // 60} minutes"
+    elif time.lower().endswith("s"):
+     seconds += int(time[:-1])
+     counter = f"{seconds} seconds"
+    elif seconds > 7776000:
+     ctx.send("You can't set the timer for more than 90 days.")
+     return
+    else:
+      ctx.send("Time invalid please try again!")
+      return
+    await ctx.send(f"{ctx.author.mention} is afk for {counter}: {reason}")
+    await ctx.author.edit(nick = f"[AFK]{ctx.author.name}")
+    await asyncio.sleep(seconds)
+    await ctx.author.edit(nick = current_nickname)
+    await ctx.send(f"{ctx.author.mention} is no longer AFK")
+    """
+
+
+
+  
+
+
 
 
 def setup(client):

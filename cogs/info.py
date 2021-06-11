@@ -14,7 +14,7 @@ class Info(commands.Cog):
 
   @commands.command(name = "stats",aliases = ["info","uptime"], description = "Bot info and statistics")
   async def stats(self,ctx):
-    mbed = d.Embed(title = "Bot info", description = "Hi i am Hammy bot!\nMy creator is Hammy(that stupid dude that likes hamsters).\nI was coded in Python, as a personal project(for fun).\nMy developer is a lazy ass and i am sorry if i don't have that many features.\nMy purpose in this server is to entertain people and i am trying my best to be useful sometimes.\nMore updates will come soon.\nLove you all! <:hammyheart:796027824494477384>",colour = discord.Colour(0xff9966))
+    mbed = d.Embed(title = "Bot info", description = "Hi i am Hammy bot!\nMy creator is Hammy(that stupid dude that likes hamsters).\nI was coded in Python, as a personal project(for fun).\nMy developer is a lazy ass and i am sorry if i don't have that many features.\nMy purpose in this server is to entertain people and i am trying my best to be useful sometimes.\nMore updates will come soon.\nLove you all! <:hammylove:846810208202129409>",colour = discord.Colour(0xff9966))
     mbed.set_thumbnail(url = str(self.bot.user.avatar_url))
     pyversion = platform.python_version()
     dpyversion = discord.__version__

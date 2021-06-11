@@ -93,7 +93,7 @@ class Custom_Commands(commands.Cog):
   async def pp(self, ctx, member : discord.Member = None):
     if member == None:
       member = ctx.author
-    mbed = d.Embed(title = f"{member.name}'s pp size:", description = "8"+ f"".join('=' for i in range(random.randrange(0,10))) + "D",color = 0xff9966)
+    mbed = d.Embed(title = f"{member.name}'s pp size:", description = "8"+ f"".join('=' for i in range(random.randrange(0,15))) + "D",color = 0xff9966)
     await ctx.send(embed = mbed)
   
   @commands.command(description = "This command shows you the nerd level")
