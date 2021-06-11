@@ -6,8 +6,8 @@ import asyncio
 from discord.ext import tasks
 #import json
 import io
-import pymongo
-from pymongo import MongoClient
+#import pymongo
+#from pymongo import MongoClient
 
 
 
