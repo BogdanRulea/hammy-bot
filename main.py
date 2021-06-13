@@ -42,7 +42,7 @@ client = commands.Bot(command_prefix=DEFAULTPREFIX, intents = intents, help_comm
 
 @client.event
 async def on_ready():
-  #Donations.start()
+  Donations.start()
   activity = discord.Game(name = "with my wheel", type = 2)
   await client.change_presence(status = discord.Status.idle, activity = activity)
   print('Hammy logged in as {0.user}'.format(client))
@@ -75,7 +75,7 @@ async def on_member_join(member):
    joined_member = int((time.time() - member.created_at.timestamp())//60//60//24)
    await channel.send(f"> **{member.name} account** was created **{joined_member}** days ago.\n**Reminder: For new members, make sure you assign them either the Pirate or Wizard Soapie role(s)!**")
 
-@tasks.loop(hours = 12)
+@tasks.loop(hours = 16)
 async def Donations():
   channel = client.get_channel(776345736392474634)
   await channel.send("Hi everyone I just wanted to say that I love you all and I hope you are ok.\nBe who you are and say what you feel, because those who mind don't matter, and those who matter don't mind.\nOh, one more thing before I go: If you like the bot and want to support it feel free to use the brand new `donate` command and help me buy a new wheel for hammy bot. <:hammylove:846810208202129409>")
