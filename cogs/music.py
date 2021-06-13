@@ -1,8 +1,8 @@
 import discord
 import discord as d
-import youtube_dl
+#import youtube_dl
 from discord.ext import commands
-import nacl
+#import nacl
 import DiscordUtils
 class Music(commands.Cog):
   def __init__(self,bot):
@@ -35,7 +35,7 @@ class Music(commands.Cog):
       await ctx.author.voice.channel.connect()
     player = self.music.get_player(guild=ctx.guild.id)
     if not player:
-      player = self.music.create_player(ctx, ffmpeg_error_betterfix = True)
+      player = self.music.create_player(ctx,ffmpeg_error_fix = True, ffmpeg_error_betterfix = True)
     if not ctx.voice_client.is_playing():
       await ctx.send("Searching...")
       await player.queue(url, search = True)

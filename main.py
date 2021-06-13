@@ -42,7 +42,7 @@ client = commands.Bot(command_prefix=DEFAULTPREFIX, intents = intents, help_comm
 
 @client.event
 async def on_ready():
-  Donations.start()
+  #Donations.start()
   activity = discord.Game(name = "with my wheel", type = 2)
   await client.change_presence(status = discord.Status.idle, activity = activity)
   print('Hammy logged in as {0.user}'.format(client))
