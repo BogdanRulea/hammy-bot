@@ -9,23 +9,22 @@ import io
 #import pymongo
 #from pymongo import MongoClient
 
-
-
-
 intents = discord.Intents.default()
 intents.members = True
 
 DEFAULTPREFIX = "?"
-
 """
-cluster = MongoClient['mongodb+srv://hammybotdb:9aB0XQ0jbP8qp9sU@cluster0.g8mdi.mongodb.net/test']
+Mongo_url = 'mongodb://hammybotdb:9aB0XQ0jbP8qp9sU@cluster0.g8mdi.mongodb.net/test'
+
+cluster = MongoClient[Mongo_url]
 
 DB = "BotData"
 
 db = cluster[DB]
 
 collection = db[DB]
-
+"""
+"""
 def get_prefix(client, message):
   data = 
 
@@ -33,8 +32,8 @@ def get_prefix(client, message):
     return commands.when_mentioned_or(data[str(message.guild.id)])(client,message)
   if not str(message.guild.id) in data:
     return commands.when_mentioned_or("?")(client,message)
-  
-"""  
+"""
+
 def new_func():
     return 241529498221281280
 

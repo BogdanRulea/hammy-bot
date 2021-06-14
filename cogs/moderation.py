@@ -7,6 +7,7 @@ import asyncio
 import discord as d
 import chat_exporter
 from discord.ext.commands.cog import Cog
+from discord.ext.commands.errors import MemberNotFound
 class Moderation(commands.Cog):
   def __init__(self,bot):
     self.bot=bot
@@ -31,31 +32,46 @@ class Moderation(commands.Cog):
 
   @commands.command(name= "userinfo",aliases = ["profile"] ,description = "shows user's info")
   async def userinfo(self,ctx, member : discord.Member = None):
-   if member == None:
-    member = ctx.author
-   date_format = "%a, %d %b %Y %I:%M %p"
-   mbed = d.Embed(color = 0xff9966, description = f"{member.mention}")
-   mbed.set_author(name = str(member), icon_url = member.avatar_url)
-   mbed.set_thumbnail(url = str(member.avatar_url))
-   mbed.add_field(name = "Joined:", value = f"{member.joined_at.strftime(date_format)}\n({int((time.time()-member.joined_at.timestamp())//60//60//24)} days ago)")
-   members = sorted(ctx.guild.members, key = lambda m : m.joined_at)
-   mbed.add_field(name = "Join position:", value = str(members.index(member)+1))
-   mbed.add_field(name = "Registered:", value = f"{member.created_at.strftime(date_format)}\n({int((time.time() - member.created_at.timestamp())//60//60//24)} days ago)")
+   try:
+     if member == None:
+      member = ctx.author
+   
+     date_format = "%a, %d %b %Y %I:%M %p"
+     mbed = d.Embed(color = 0xff9966, description = f"{member.mention}")
+     mbed.set_author(name = str(member), icon_url = member.avatar_url)
+     mbed.set_thumbnail(url = str(member.avatar_url))
+     mbed.add_field(name = "Joined:", value = f"{member.joined_at.strftime(date_format)}\n({int((time.time()-member.joined_at.timestamp())//60//60//24)} days ago)")
+     members = sorted(ctx.guild.members, key = lambda m : m.joined_at)
+     mbed.add_field(name = "Join position:", value = str(members.index(member)+1))
+     mbed.add_field(name = "Registered:", value = f"{member.created_at.strftime(date_format)}\n({int((time.time() - member.created_at.timestamp())//60//60//24)} days ago)")
 
-   if len(member.roles)>1:
-    role_find=','.join([r.mention for r in member.roles][1:])
-    if len(member.roles)<20:
-     mbed.add_field(name = "Roles [{}]".format(len(member.roles) -1), value = role_find, inline = False)
-    else:
-      mbed.add_field(name = "Roles [{}]".format(len(member.roles) -1), value = "Too many roles to show.", inline = False)
-   highest_role = member.roles
-   highest_role.reverse()
-   mbed.add_field(name = "Highest Role:", value = highest_role[0], inline = False)
-   perm_find = ', '.join(str(p[0]).replace('_',' ') for p in member.guild_permissions if p[1])
-   mbed.add_field(name = "Guild permissions:", value = perm_find, inline = False)
-   mbed.timestamp = datetime.datetime.utcnow()
-   mbed.set_footer(text = f"ID: {str(member.id)}/")
-   await ctx.send(embed = mbed)
+     if len(member.roles)>1:
+      role_find=','.join([r.mention for r in member.roles][1:])
+      if len(member.roles)<20:
+       mbed.add_field(name = "Roles [{}]".format(len(member.roles) -1), value = role_find, inline = False)
+      else:
+       mbed.add_field(name = "Roles [{}]".format(len(member.roles) -1), value = "Too many roles to show.", inline = False)
+     highest_role = member.roles
+     highest_role.reverse()
+     mbed.add_field(name = "Highest Role:", value = highest_role[0], inline = False)
+     perm_find = ', '.join(str(p[0]).replace('_',' ') for p in member.guild_permissions if p[1])
+     mbed.add_field(name = "Guild permissions:", value = perm_find, inline = False)
+     mbed.timestamp = datetime.datetime.utcnow()
+     mbed.set_footer(text = f"ID: {str(member.id)}/")
+     await ctx.send(embed = mbed)
+   except MemberNotFound:
+     await ctx.send(f"Member not found")
+    
+   """
+    date_format = "%a, %d %b %Y %I:%M %p"
+    mbed = d.Embed(color = 0xff9966, description = f"{member.mention}")
+    mbed.set_author(name = str(member), icon_url = member.avatar_url)
+    mbed.set_thumbnail(url = str(member.avatar_url))
+    mbed.add_field(name = "Registered:", value = f"{member.created_at.strftime(date_format)}\n({int((time.time() - member.created_at.timestamp())//60//60//24)} days ago)")
+    mbed.timestamp = datetime.datetime.utcnow()
+    mbed.set_footer(text = f"ID: {str(member.id)}/")
+    await ctx.send(embed = mbed)
+   """
   """
   @commands.command()
   async def catcreate(self,ctx, role : discord.Role, *, name):

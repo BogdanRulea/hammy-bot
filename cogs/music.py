@@ -1,8 +1,8 @@
 import discord
 import discord as d
-#import youtube_dl
+import youtube_dl
 from discord.ext import commands
-#import nacl
+import nacl
 import DiscordUtils
 class Music(commands.Cog):
   def __init__(self,bot):
@@ -24,6 +24,7 @@ class Music(commands.Cog):
   async def leave(self, ctx):
     if ctx.voice_client:
      await ctx.voice_client.disconnect()
+     await ctx.send("Successfully disconnected.")
     else:
       await ctx.send(f"{self.bot.user} is not in any voice channel.")
   
