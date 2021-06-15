@@ -28,6 +28,9 @@ class Useful_Commands(commands.Cog):
   @commands.command(name = "inrole", description = "gives you the number of people with a specified role")
   async def inrole(self, ctx, role : discord.Role):
    rol = ctx.guild.get_role(role.id)
+   if rol not in ctx.guild:
+     await ctx.send("I couldn't find this role in the server.")
+     return
    memberlist = [] 
    embeds = []
    for r in rol.members:

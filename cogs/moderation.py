@@ -22,8 +22,6 @@ class Moderation(commands.Cog):
         deleted = await ctx.message.channel.purge(limit = number + 1)
         channels  = ctx.guild.get_channel(776678190831632414)
         await channels.send(f"{ctx.author.name} has purged {len(deleted)-1} messages in {ctx.channel.mention}.")
-        delete = await ctx.channel.send(f"Messages purged by {ctx.message.author}: `{len(deleted)-1}`")
-        await asyncio.sleep(1)
         await ctx.message.channel.purge(limit = 1)
     except AttributeError:
       await ctx.channel.send("Purge error.")

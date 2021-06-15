@@ -46,6 +46,21 @@ async def on_ready():
   await client.change_presence(status = discord.Status.idle, activity = activity)
   print('Hammy logged in as {0.user}'.format(client))
 
+
+@client.event
+async def on_command_error(ctx, error):
+  if isinstance(error, commands.CommandNotFound):
+    await ctx.send("This command is invalid.")
+  elif isinstance(error, commands.TooManyArguments):
+    await ctx.send("You wrote too many argument to this function")
+  elif isinstance(error, commands.MemberNotFound):
+    await ctx.send("I couldn't find this member in the server.")
+  elif isinstance(error, commands.MissingRequiredArgument):
+    await ctx.send("You forgot to add the required arguments.")
+  else:
+   await ctx.send("Command error, please try again.")
+
+  
 """
 @client.event
 async def on_message(message):
