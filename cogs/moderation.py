@@ -1,4 +1,5 @@
 import discord
+from discord import webhook
 from discord.ext import commands
 import io
 import os
@@ -8,6 +9,7 @@ import discord as d
 import chat_exporter
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import MemberNotFound
+from discord_webhook import DiscordWebhook, DiscordEmbed
 class Moderation(commands.Cog):
   def __init__(self,bot):
     self.bot=bot
@@ -156,7 +158,33 @@ class Moderation(commands.Cog):
    mbed.timestamp=datetime.datetime.utcnow()
 
    await ctx.send(embed = mbed)
-   
+  
+  @commands.command(name = "serverupdate", aliases = ["su","serverupdates","updates"],description = "This command post an announcement in server updates section using a webhook.")
+  async def _serverupdate(self,ctx):
+    def check(msg):
+      return msg.author == ctx.author and msg.channel == ctx.channel
+
+    await ctx.send("Ok, you can write the update description below.")
+
+    message = await self.bot.wait_for("message", check = check)
+
+    webhook = DiscordWebhook(url = 'https://discord.com/api/webhooks/780594092602163200/T65Xl-QN6cgkcn0lItJ9ulxDhw24vn0u4CY6sUaQIra8w9zvop3S3_pn-NTXxtYo2Dky')
+
+    mbed = DiscordEmbed(title = "Server Update", description = str(message.content), color = '00ffe3')
+
+    webhook.add_embed(mbed)
+    webhook_post = webhook.execute()
+
+    embed = d.Embed(title = "Success", description = f"The announcement was successfully posted.",colour=discord.Colour(0xff9966))
+    embed.set_thumbnail(url = str(ctx.guild.icon_url))
+    await ctx.send(embed = embed)
+
+    
+
+
+
+
+
   """
   @commands.command(name ="afk", description = "This command make you AFK")
   async def afk(self,ctx,time ,*,reason = "No reason given"):
