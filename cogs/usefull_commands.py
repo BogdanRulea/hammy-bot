@@ -297,7 +297,7 @@ class Useful_Commands(commands.Cog):
     await ctx.send("You don't have the permissions to use this command.")
   
   @commands.command(name = "poll", description = "create a poll in the specified channel with the given options (if you have only 2 options, yes and no, then it will create a yes and no pool otherwise it will create a poll with max. 10 options) - the question and all options have to be between\"\"")
-  async def poll(self,ctx, channel : discord.TextChannel, question : str, *options :str):
+  async def poll(self,ctx, channel : discord.TextChannel,question : str, *options :str):
    if ctx.author.guild_permissions.manage_messages:
      if len(options) <=1:
        await ctx.send("**You need more that 1 option to create a pool.**")
@@ -318,15 +318,29 @@ class Useful_Commands(commands.Cog):
      chan = self.bot.get_channel(channel.id)
      def check(msg):
       return msg.author == ctx.author and msg.channel == ctx.channel
-
+     mentioned_roles=""
      await ctx.send("Do you want to add ``@here``?(yes/no)")
      
      answer = await self.bot.wait_for("message", check = check)
+
      if answer.content.lower() == "yes":
-      react_message = await chan.send(embed = mbed)
-      await chan.send("@here")
-     elif answer.content.lower() == "no":
-      react_message = await chan.send(embed = mbed)
+      mentioned_roles = "@here"
+    
+     await ctx.send("Do you want to add another role?(yes/no)")
+
+     answer2 = await self.bot.wait_for("message", check = check)
+
+     if answer2.content.lower() == "yes":
+       await ctx.send("Now type the role id you want to add.")
+       role = await self.bot.wait_for("message", check = check) 
+       role = discord.utils.get(ctx.guild.roles, id = int(role.content))
+       mentioned_roles=mentioned_roles + " " + role.mention
+
+     if len(mentioned_roles) > 0:
+       react_message= await chan.send(embed = mbed)
+       await chan.send(mentioned_roles)
+     else:
+       react_message=await chan.send(embed = mbed)
      mbed.set_footer(text = f"Author: {ctx.message.author.name}/Poll ID: {react_message.id}")
      mbed2 = d.Embed(title = "Poll Created", description = f"{ctx.message.author.mention} your poll has been posted in {channel.mention}")
      await ctx.send(embed = mbed2)
