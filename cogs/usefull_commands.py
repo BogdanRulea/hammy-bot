@@ -316,7 +316,17 @@ class Useful_Commands(commands.Cog):
      mbed.set_thumbnail(url = str(ctx.guild.icon_url))
 
      chan = self.bot.get_channel(channel.id)
-     react_message = await chan.send(embed = mbed)
+     def check(msg):
+      return msg.author == ctx.author and msg.channel == ctx.channel
+
+     await ctx.send("Do you want to add ``@here``?(yes/no)")
+     
+     answer = await self.bot.wait_for("message", check = check)
+     if answer.content.lower() == "yes":
+      react_message = await chan.send(embed = mbed)
+      await chan.send("@here")
+     elif answer.content.lower() == "no":
+      react_message = await chan.send(embed = mbed)
      mbed.set_footer(text = f"Author: {ctx.message.author.name}/Poll ID: {react_message.id}")
      mbed2 = d.Embed(title = "Poll Created", description = f"{ctx.message.author.mention} your poll has been posted in {channel.mention}")
      await ctx.send(embed = mbed2)

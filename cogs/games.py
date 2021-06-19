@@ -56,6 +56,47 @@ class Games(commands.Cog):
     mbed.add_field(name = "Your number: ", value = str(random.choice(range(1,6))), inline = True)
     await ctx.send(embed = mbed)
   
+  @commands.command(description = "This command shows you the pp size")
+  async def pp(self, ctx, member : discord.Member = None):
+    if member == None:
+      member = ctx.author
+    mbed = d.Embed(title = f"{member.name}'s pp size:", description = "8"+ f"".join('=' for i in range(random.randrange(0,15))) + "D",color = 0xff9966)
+    await ctx.send(embed = mbed)
+  
+  @commands.command(description = "This command shows you the nerd level")
+  async def nerd(self,ctx, member : discord.Member = None):
+    if member == None:
+      member = ctx.author
+    
+    mbed = d.Embed(title = f"{member.name}'s nerd level:", description = f"You are {random.randrange(0,100)}/100 nerd.", color = 0xff9966)
+    await ctx.send(embed = mbed)
+  
+  @commands.command(description = "This command shows you the simp rate")
+  async def simp(self,ctx, member : discord.Member = None):
+    if member == None:
+      member = ctx.author
+    
+    mbed = d.Embed(title = f"{member.name}'s simp rate:", description = f"You are {random.randrange(0,100)}/100 simp.", color = 0xff9966)
+    await ctx.send(embed = mbed)
+  
+  @commands.command(description = "This command shows you the alchy level")
+  async def alchy(self,ctx, member : discord.Member = None):
+    if member == None:
+      member = ctx.author
+    mbed = d.Embed(title = f"{member.name}'s alchy level:", description = f"You are {random.randrange(0,100)}/100 alchy.", color = 0xff9966)
+    await ctx.send(embed = mbed)
+  
+  @commands.command(description = "This command shows you the waifu level")
+  async def waifu(self,ctx, member : discord.Member = None):
+    if member == None:
+      member = ctx.author
+    mbed = d.Embed(title = f"{member.name}'s waifu level:", description = f"You are {random.randrange(0,100)}/100 waifu. <:pepeblush:814708544921927690>", color = 0xff9966)
+    await ctx.send(embed = mbed)
+  
+  @commands.command(name = "8ball", description ="Troll responses.")
+  async def _8ball(self,ctx,*,question : str):
+    random_response = ["I don't care", "Maybe or maybe not", "I don't know 4head", "No, ofc not", "Yes and what about it", "Idk but i know you are dumb", "mayhaps", "Who told you that?","Idk, stay away from me", "Idk and i don't care.", "I don't talk to stupid ppl.", "Yes, this is true my love.", "Who are you to ask this question?","Yes, don't tell anyone.", "Sure, why not.", "Yes, definitely yes."]
+    await ctx.reply(f"🎱{random.choice(random_response)}")
 
 def setup(client):
   client.add_cog(Games(client))

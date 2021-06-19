@@ -35,7 +35,7 @@ class Info(commands.Cog):
   async def help(self,ctx):
     
     cogs = [c for c in self.bot.cogs.keys()]
-    cogs.remove('Levels')
+    #cogs.remove('Levels')
     embeds = []
 
     for cog in cogs:

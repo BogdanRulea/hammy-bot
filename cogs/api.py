@@ -3,7 +3,7 @@ from discord.ext import commands
 import json
 import requests
 import aiohttp 
-
+from pyrandmeme import *
 
 
 class API_Commands(commands.Cog):
@@ -36,5 +36,10 @@ class API_Commands(commands.Cog):
                 print(r)
                 #await ctx.send(f"**{r['setup'][0]}**\n\n||{r['punchline'][0]}||")
         """
+
+    @commands.command(name = "meme", description = "This command shows you a random meme.")
+    async def _meme(self,ctx):
+        await ctx.send(embed = await pyrandmeme())
+
 def setup(client):
     client.add_cog(API_Commands(client))

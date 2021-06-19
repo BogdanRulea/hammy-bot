@@ -104,42 +104,7 @@ class Custom_Commands(commands.Cog):
     else: 
       await ctx.send("You do not have the permissions to use this command")
 
-  @commands.command(description = "This command shows you the pp size")
-  async def pp(self, ctx, member : discord.Member = None):
-    if member == None:
-      member = ctx.author
-    mbed = d.Embed(title = f"{member.name}'s pp size:", description = "8"+ f"".join('=' for i in range(random.randrange(0,15))) + "D",color = 0xff9966)
-    await ctx.send(embed = mbed)
-  
-  @commands.command(description = "This command shows you the nerd level")
-  async def nerd(self,ctx, member : discord.Member = None):
-    if member == None:
-      member = ctx.author
-    
-    mbed = d.Embed(title = f"{member.name}'s nerd level:", description = f"You are {random.randrange(0,100)}/100 nerd.", color = 0xff9966)
-    await ctx.send(embed = mbed)
-  
-  @commands.command(description = "This command shows you the simp rate")
-  async def simp(self,ctx, member : discord.Member = None):
-    if member == None:
-      member = ctx.author
-    
-    mbed = d.Embed(title = f"{member.name}'s simp rate:", description = f"You are {random.randrange(0,100)}/100 simp.", color = 0xff9966)
-    await ctx.send(embed = mbed)
-  
-  @commands.command(description = "This command shows you the alchy level")
-  async def alchy(self,ctx, member : discord.Member = None):
-    if member == None:
-      member = ctx.author
-    mbed = d.Embed(title = f"{member.name}'s alchy level:", description = f"You are {random.randrange(0,100)}/100 alchy.", color = 0xff9966)
-    await ctx.send(embed = mbed)
-  
-  @commands.command(description = "This command shows you the waifu level")
-  async def waifu(self,ctx, member : discord.Member = None):
-    if member == None:
-      member = ctx.author
-    mbed = d.Embed(title = f"{member.name}'s waifu level:", description = f"You are {random.randrange(0,100)}/100 waifu. <:pepeblush:814708544921927690>", color = 0xff9966)
-    await ctx.send(embed = mbed)
+
 
 def setup(client):
  client.add_cog(Custom_Commands(client))
