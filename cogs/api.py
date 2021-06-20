@@ -13,6 +13,7 @@ class API_Commands(commands.Cog):
     def get_quote(self):
      response = requests.get("https://zenquotes.io/api/random")
      json_data = json.loads(response.text)
+     
      quote = '> ' + json_data[0]["q"] + "-" + '||' + json_data[0]["a"] + '||'
      return (quote)
 
@@ -40,6 +41,51 @@ class API_Commands(commands.Cog):
     @commands.command(name = "meme", description = "This command shows you a random meme.")
     async def _meme(self,ctx):
         await ctx.send(embed = await pyrandmeme())
+    
+    @commands.command(name = "roast", description = "This command roast you or someone you mention.")
+    async def _roast(self,ctx, member : discord.Member = None):
+        if member == None:
+            member = ctx.author
+        
+        url = "https://evilinsult.com/generate_insult.php?lang=en&type=json"
+        response = requests.get(url)
+        json_data = response.json()
+        await ctx.send(f"**{member.name} - {json_data['insult']}**")
+    
+    @commands.command(name = "chucknorris", aliases = ["cn","legend","chuck","norris"], description = "Chuck Norris jokes.")
+    async def _chuck(self,ctx):
+        url = "https://api.chucknorris.io/jokes/random"
+        response = requests.get(url)
+        json_data = response.json()
+        await ctx.send(f"**{json_data['value']}**")
+    
+    """
+    @commands.command(name = "love", description = "Love calculator.")
+    async def _love(self,ctx, member  : discord.Member):
+        url = "https://love-calculator.p.rapidapi.com/getPercentage"
+
+        querystring = {"fname":ctx.author.name,"sname": member.name}
+
+        headers = {'x-rapidapi-host': 'love-calculator.p.rapidapi.com'}
+        response = requests.request("GET", url, headers=headers, params=querystring)
+
+        #json_data = response.json()
+        print(response)
+    """
+    """
+    @commands.command(name = "news", description = "Latest news all around the world: Breaking news.")
+    async def _news(self,ctx):
+
+        url = "https://myallies-breaking-news-v1.p.rapidapi.com/GetTopNews"
+
+        headers = {'x-rapidapi-host': 'myallies-breaking-news-v1.p.rapidapi.com'}
+
+        response = requests.request("GET", url, headers=headers)
+
+        print(response.text)
+    """
+
+
 
 def setup(client):
     client.add_cog(API_Commands(client))

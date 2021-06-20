@@ -95,7 +95,7 @@ class Games(commands.Cog):
   
   @commands.command(name = "8ball", description ="Troll responses.")
   async def _8ball(self,ctx,*,question : str):
-    random_response = ["I don't care", "Maybe or maybe not", "I don't know 4head", "No, ofc not", "Yes and what about it", "Idk but i know you are dumb", "mayhaps", "Who told you that?","Idk, stay away from me", "Idk and i don't care.", "I don't talk to stupid ppl.", "Yes, this is true my love.", "Who are you to ask this question?","Yes, don't tell anyone.", "Sure, why not.", "Yes, definitely yes."]
+    random_response = ["I don't care", "Maybe or maybe not", "I don't know 4head", "No, ofc not", "Yes and what about it", "Idk but i know you are dumb", "mayhaps", "Who told you that?","Idk, stay away from me", "Idk and i don't care.", "I don't talk to stupid ppl.", "Yes, this is true my love.", "Who are you to ask this question?","Yes, don't tell anyone.", "Sure, why not.", "Yes, definitely yes.", "I don't want to answer.", "Everyone has secrets.", "Yes, now leave me alone", "Yes and no", "Yes but actually no."]
     await ctx.reply(f"🎱{random.choice(random_response)}")
 
 def setup(client):

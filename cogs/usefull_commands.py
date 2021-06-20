@@ -259,8 +259,9 @@ class Useful_Commands(commands.Cog):
     
    else:
     await ctx.channel.send("**You don't have the permissions to post a wwyd.**")
-
+  
   @commands.command(name = "reminder", description = "set a reminder for a specified reason")
+  @commands.has_guild_permissions(manage_channels = True, manage_roles = True)
   async def reminder(self,ctx, time, *, remind_me = None):
    if ctx.author.guild_permissions.manage_messages:
     user = ctx.message.author
