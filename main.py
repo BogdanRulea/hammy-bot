@@ -59,6 +59,8 @@ async def on_command_error(ctx, error):
     await ctx.send("You forgot to add the required arguments.")
   elif isinstance(error, commands.MissingPermissions):
     await ctx.send("I don't have the permissions to do that.")
+  elif isinstance(error, commands.RoleNotFound):
+    await ctx.send("I couldn't find this role.")
   else:
    await ctx.send("Command error, please try again.")
 

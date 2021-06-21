@@ -60,6 +60,19 @@ class API_Commands(commands.Cog):
         await ctx.send(f"**{json_data['value']}**")
     
     """
+    @commands.command(name = "country", description = "This command shows you the mentioned country info.")
+    async def _country(self,ctx, country):
+        url = "https://ip-geo-location.p.rapidapi.com/ip/check"
+
+        querystring = {"format":"json","filter":"country","language":"en"}
+
+        headers = {'x-rapidapi-host': 'ip-geo-location.p.rapidapi.com'}
+
+        response = requests.request("GET", url, headers=headers, params=querystring)
+
+        print(response.text)
+    """
+    """
     @commands.command(name = "love", description = "Love calculator.")
     async def _love(self,ctx, member  : discord.Member):
         url = "https://love-calculator.p.rapidapi.com/getPercentage"
