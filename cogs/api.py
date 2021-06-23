@@ -62,7 +62,7 @@ class API_Commands(commands.Cog):
         await ctx.send(f"**{json_data['value']}**")
     
     @commands.command(name = "urban", aliases = ["ud","dictionary","mean"], description = "Urban dictionary for discord.")
-    async def _urban(self,ctx, term):
+    async def _urban(self,ctx,*,term):
         
      url = "https://mashape-community-urban-dictionary.p.rapidapi.com/define"
 
