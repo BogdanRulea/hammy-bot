@@ -3,6 +3,7 @@ from discord.ext import commands
 import json
 import requests
 import aiohttp 
+import discord as d
 from pyrandmeme import *
 
 
@@ -41,6 +42,7 @@ class API_Commands(commands.Cog):
     @commands.command(name = "meme", description = "This command shows you a random meme.")
     async def _meme(self,ctx):
         await ctx.send(embed = await pyrandmeme())
+      
     
     @commands.command(name = "roast", description = "This command roast you or someone you mention.")
     async def _roast(self,ctx, member : discord.Member = None):
@@ -59,6 +61,23 @@ class API_Commands(commands.Cog):
         json_data = response.json()
         await ctx.send(f"**{json_data['value']}**")
     
+    @commands.command(name = "urban", aliases = ["ud","dictionary","mean"], description = "Urban dictionary for discord.")
+    async def _urban(self,ctx, term):
+        
+     url = "https://mashape-community-urban-dictionary.p.rapidapi.com/define"
+
+     querystring = {"term":term.lower()}
+
+     headers = {'x-rapidapi-host': 'mashape-community-urban-dictionary.p.rapidapi.com','x-rapidapi-key': "50a4f38679msh704c82e1d14329fp1e023ajsnaf7583db258b"}
+
+     response = requests.request("GET", url, headers=headers, params=querystring)
+
+     json_data = response.json()
+
+     mbed = d.Embed(title = f"Urban Dictionary for {term.lower()}:", color = 0xff9966)
+     mbed.add_field(name = "Definition:", value = json_data["list"][0]["definition"],inline = False)
+     await ctx.send(embed = mbed)
+    
     """
     @commands.command(name = "country", description = "This command shows you the mentioned country info.")
     async def _country(self,ctx, country):
@@ -72,19 +91,56 @@ class API_Commands(commands.Cog):
 
         print(response.text)
     """
-    """
-    @commands.command(name = "love", description = "Love calculator.")
+    
+    @commands.command(name = "love", aliases = ["match"],description = "Love calculator.")
     async def _love(self,ctx, member  : discord.Member):
         url = "https://love-calculator.p.rapidapi.com/getPercentage"
 
         querystring = {"fname":ctx.author.name,"sname": member.name}
 
-        headers = {'x-rapidapi-host': 'love-calculator.p.rapidapi.com'}
+        headers = {'x-rapidapi-host': 'love-calculator.p.rapidapi.com','x-rapidapi-key': "50a4f38679msh704c82e1d14329fp1e023ajsnaf7583db258b"}
         response = requests.request("GET", url, headers=headers, params=querystring)
 
-        #json_data = response.json()
-        print(response)
+        json_data = response.json()
+
+        mbed = d.Embed(title = "Love calculator", color = 0xff9966)
+
+        mbed.add_field(name = "Lovers:" , value = f"{ctx.author.name} and {member.name}",inline = False)
+        mbed.add_field(name = "Percentage:", value = json_data["percentage"], inline = True)
+        mbed.add_field(name = "Result:", value = json_data["result"],inline = False)      
+
+        await ctx.send(embed = mbed)
     """
+    @commands.command(name = "country", description = "Country information.")
+    async def _name(self,ctx,country):
+        url = f"https://restcountries-v1.p.rapidapi.com/name/{country}"
+
+        headers = {
+         'x-rapidapi-key': "9a14a69cfcmsh31448a8a81dfd67p110f7djsn570e8d798fdd",
+         'x-rapidapi-host': "restcountries-v1.p.rapidapi.com"
+            }
+
+        response = requests.request("GET", url, headers=headers)
+        json_data = response.json()
+
+        print(response.text)
+        mbed = d.Embed(title = f"{country.upper()} info:",color = 0xff9966)
+        mbed.add_field(name = "Name:", value = json_data[0]["name"],inline = False)
+        mbed.add_field(name = "Calling Codes:", value = ", ".join(f for f in json_data[0]["callingCodes"]),inline = False)
+        mbed.add_field(name = "Capital:", value = json_data[0]["capital"],inline = False)
+        mbed.add_field(name = "Region:", value = json_data[0]["region"],inline = False)
+        mbed.add_field(name = "SubRegion:", value = json_data[0]["subregion"],inline = False)
+        mbed.add_field(name = "Population:", value = json_data[0]["population"],inline = False)
+        mbed.add_field(name = "Timezones:", value = ", ".join(f for f in json_data[0]["timezones"]),inline = False)
+        mbed.add_field(name = "Numeric Code:", value = json_data[0]["numericCode"],inline = False)
+        mbed.add_field(name = "Currencies:", value = ", ".join(f for f in json_data[0]["currencies"]),inline = False)
+        mbed.add_field(name = "Languages:", value = ", ".join(f for f in json_data[0]["languages"]),inline = False)
+        mbed.add_field(name = "Borders:", value = ", ".join(f for f in json_data[0]["borders"]),inline = False)
+        mbed.add_field(name = "Alt Spellings:", value = ", ".join(f for f in json_data[0]["altSpellings"]),inline = False)
+        
+        await ctx.send(embed = mbed)
+    """
+        
     """
     @commands.command(name = "news", description = "Latest news all around the world: Breaking news.")
     async def _news(self,ctx):
@@ -97,6 +153,7 @@ class API_Commands(commands.Cog):
 
         print(response.text)
     """
+
 
 
 
