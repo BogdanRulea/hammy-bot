@@ -357,6 +357,24 @@ class Useful_Commands(commands.Cog):
     embed = d.Embed(title = f"{member.name}\'s avatar")
     embed.set_image(url = member.avatar_url)
     await ctx.send(embed = embed)
+  
+  @commands.command(name = "password", aliases = ["pass"], description  ="Generates a random password for you.")
+  async def _passord(self,ctx):
+    num_char = random.randrange(8,12)
+    password = ""
+    password_chars = {
+      1: [".","!","%","#","$","*","&","?"],
+      3: ["0","1","2","3","4","5","6","7","8","9"]
+    }
+    for i in range(num_char):
+      my_char = random.randrange(1,4)
+      password = password + random.choice([password_chars[1][random.randrange(0,8)],
+         chr(random.randrange(65,90)),
+         password_chars[3][random.randrange(0,9)],
+         chr(random.randrange(97,122))])
+    
+    await ctx.send(f"Your password is: ``{password}``")
+
 
   """
   @commands.command(pass_context = True)

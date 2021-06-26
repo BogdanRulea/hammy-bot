@@ -110,6 +110,7 @@ class API_Commands(commands.Cog):
         mbed.add_field(name = "Result:", value = json_data["result"],inline = False)      
 
         await ctx.send(embed = mbed)
+    
     """
     @commands.command(name = "country", description = "Country information.")
     async def _name(self,ctx,country):
