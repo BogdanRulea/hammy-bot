@@ -3,6 +3,7 @@ from discord import webhook
 from discord.ext import commands
 import io
 import os
+import sys
 import discord, datetime, time 
 import asyncio
 import discord as d
@@ -179,11 +180,12 @@ class Moderation(commands.Cog):
     embed.set_thumbnail(url = str(ctx.guild.icon_url))
     await ctx.send(embed = embed)
 
-    
-
-
-
-
+  @commands.command(name = "reload", descripition = 'Reload a module.')
+  @commands.has_guild_permissions(administrator = True)
+  async def _reload(self,ctx, name):
+    self.bot.unload_extension("cogs."+name)
+    self.bot.load_extension("cogs."+name)
+    await ctx.send(f"{name} module has been reloaded.")
 
   """
   @commands.command(name ="afk", description = "This command make you AFK")

@@ -110,6 +110,22 @@ class API_Commands(commands.Cog):
         mbed.add_field(name = "Result:", value = json_data["result"],inline = False)      
 
         await ctx.send(embed = mbed)
+    """
+    @commands.command(name = "exchange", aliases = ["money", "howmuchis"], description = "Currency exchange.")
+    async def _exchange(self, ctx, q, f : str, t : str):
+        url = "https://currency-exchange.p.rapidapi.com/exchange"
+
+        querystring = {"to":t.upper(),"from":f.upper(),"q":int(q)}
+
+        headers = {
+        'x-rapidapi-key': "9a14a69cfcmsh31448a8a81dfd67p110f7djsn570e8d798fdd",
+        'x-rapidapi-host': "currency-exchange.p.rapidapi.com"
+        }
+
+        response = requests.request("GET", url, headers=headers, params=querystring)
+        json_data = response.json()
+        print(json_data) 
+    """
     
     """
     @commands.command(name = "country", description = "Country information.")

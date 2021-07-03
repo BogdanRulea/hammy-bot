@@ -205,8 +205,7 @@ class Music(commands.Cog):
     
     else:
       await ctx.send("Code errro")
-    
-  """
+  """  
 
 def setup(client):
   client.add_cog(Music(client)) 
