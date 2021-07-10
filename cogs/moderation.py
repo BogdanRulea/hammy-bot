@@ -9,7 +9,7 @@ import asyncio
 import discord as d
 import chat_exporter
 from discord.ext.commands.cog import Cog
-from discord.ext.commands.errors import MemberNotFound
+from discord.ext.commands.errors import MemberNotFound, RoleNotFound
 from discord_webhook import DiscordWebhook, DiscordEmbed
 class Moderation(commands.Cog):
   def __init__(self,bot):
@@ -180,7 +180,58 @@ class Moderation(commands.Cog):
     embed.set_thumbnail(url = str(ctx.guild.icon_url))
     await ctx.send(embed = embed)
 
-  @commands.command(name = "reload", descripition = 'Reload a module.')
+  """
+  @commands.command(name = "ban", aliases = ["yeet"], description = "Ban the mentioned server member.")
+  @commands.has_guild_permissions(administrator = True)
+  async def _ban(self,ctx,member : discord.Member,*, reason = None):
+  """
+  @commands.command(name = "check_role", aliases = ["srole"], description = "Check if the role exist in the server.")
+  @commands.has_guild_permissions(manage_roles = True)
+  async def _role1(self,ctx, role:discord.Role):
+    try:
+     if discord.utils.get(ctx.guild.roles,name = role.name):
+      await ctx.send(f"The {role.name} role already exist in the server.")
+    except RoleNotFound:
+      await ctx.send("The role is not in the server.")
+
+  @commands.command(name = "create_role", aliases = ["crole"], description = "Create a custom role.")
+  @commands.has_guild_permissions(administrator = True)
+  async def _role2(self,ctx):
+    
+    def check(msg):
+      return msg.author == ctx.author and msg.channel == ctx.channel
+    
+    try:
+     await ctx.send("Now type the role name.")
+     response = await self.bot.wait_for("message", check = check)
+
+     await ctx.send("Now type the color you would like the role to be.")
+     color = await self.bot.wait_for("message", check = check)
+     color_value = int(hex(int(color.content.replace('#',''),16)),0)
+     await ctx.guild.create_role(name = response.content, colour = color_value)
+     await ctx.send(f"{response.content} role has been created.\n**You can check it in the server roles list.**")
+    except ValueError:
+      await ctx.send("You have to type a valid color code.")
+  
+  @commands.command(name = "delete_role", aliases = ['delrole', 'drole'], description = "Delete a server role.")
+  @commands.has_guild_permissions(administrator = True)
+  async def _role3(self, ctx, role : discord.Role):
+    try:
+     role = discord.utils.get(ctx.guild.roles,name = role.name)
+     if role:
+      await role.delete()
+      await ctx.send(f"The {role.name} role has been deleted!")
+    except RoleNotFound:
+      await ctx.send("The role is not in the server.")
+
+  """
+  @commands.command(name = "kick", aliases = ["yeet"], description = "Kick a member from the server.")
+  @commands.has_guild_permissions(kick_members = True)
+  async def _kick(self, ctx, member : discord.member,*,reason = None):
+    await self.bot.kick()
+    mbed = d.Embed(title = "Warning!!!", description = f"You have been kicked from {ctx.guild.name} for the following reason: {reason}.", color = 0xff9966)
+  """  
+  @commands.command(name = "reload", descripition = "Reload a module.")
   @commands.has_guild_permissions(administrator = True)
   async def _reload(self,ctx, name):
     self.bot.unload_extension("cogs."+name)

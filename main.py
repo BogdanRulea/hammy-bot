@@ -41,7 +41,7 @@ client = commands.Bot(command_prefix=DEFAULTPREFIX, intents = intents, help_comm
 
 @client.event
 async def on_ready():
-  Donations.start()
+  #Donations.start()
   activity = discord.Game(name = "with my wheel", type = 2)
   await client.change_presence(status = discord.Status.idle, activity = activity)
   print('Hammy logged in as {0.user}'.format(client))
@@ -58,7 +58,7 @@ async def on_command_error(ctx, error):
   elif isinstance(error, commands.MissingRequiredArgument):
     await ctx.send("You forgot to add the required arguments.")
   elif isinstance(error, commands.MissingPermissions):
-    await ctx.send("I don't have the permissions to do that.")
+    await ctx.send("You don't have the permissions to do that.")
   elif isinstance(error, commands.RoleNotFound):
     await ctx.send("I couldn't find this role.")
   else:
